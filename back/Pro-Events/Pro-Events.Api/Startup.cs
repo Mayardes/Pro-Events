@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Pro_Events.Api.Data;
 
 namespace Pro_Events.Api
 {
@@ -14,11 +16,12 @@ namespace Pro_Events.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+            services.AddDbContext<DataContext>(context => context.UseInMemoryDatabase(Configuration.GetValue<string>("Database:Name")));
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pro-Events.API", Version = "v1" });
             });
         }
 
@@ -29,7 +32,7 @@ namespace Pro_Events.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProEventos.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pro-Events.API v1"));
             }
 
             app.UseHttpsRedirection();
